@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Ticker symbol:</strong>
+  <%= @stock.ticker_symbol %>
+</p>
+
+<p>
+  <strong>Last known price:</strong>
+  <%= @stock.last_known_price %>
+</p>
+
+<%= link_to 'Edit', edit_stock_path(@stock) %> |
+<%= link_to 'Back', stocks_path %>

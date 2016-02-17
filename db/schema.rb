@@ -11,35 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160217083556) do
+ActiveRecord::Schema.define(version: 20160217085028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "stock_purchases", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "stock_id"
-    t.datetime "purchase_time"
-    t.integer  "purchase_price_cents",    default: 0,     null: false
-    t.string   "purchase_price_currency", default: "USD", null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.integer  "amount_purchased"
-  end
-
-  add_index "stock_purchases", ["stock_id"], name: "index_stock_purchases_on_stock_id", using: :btree
-  add_index "stock_purchases", ["user_id", "stock_id"], name: "index_stock_purchases_on_user_id_and_stock_id", using: :btree
-  add_index "stock_purchases", ["user_id"], name: "index_stock_purchases_on_user_id", using: :btree
-
   create_table "stocks", force: :cascade do |t|
-    t.string   "ticker_symbol"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "price_cents",    default: 0,     null: false
-    t.string   "price_currency", default: "USD", null: false
+    t.string   "ticker_symbol",                             null: false
+    t.integer  "last_known_price_cents",    default: 0,     null: false
+    t.string   "last_known_price_currency", default: "USD", null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
-  add_index "stocks", ["ticker_symbol"], name: "index_stocks_on_ticker_symbol", using: :btree
+  add_index "stocks", ["ticker_symbol"], name: "index_stocks_on_ticker_symbol", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "password_digest"
@@ -54,5 +39,4 @@ ActiveRecord::Schema.define(version: 20160217083556) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["session_token"], name: "index_users_on_session_token", unique: true, using: :btree
 
-  add_foreign_key "stock_purchases", "stocks"
 end
