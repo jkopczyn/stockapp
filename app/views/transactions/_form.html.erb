@@ -1,31 +1,20 @@
-<%= form_for(@transaction) do |f| %>
-  <% if @transaction.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
-
-      <ul>
-      <% @transaction.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<% @stock = Stock.find(params[:stock_id]) %>
+<%= form_for @transaction, url: stock_transactions_path do |f| %>
+    <%= f.hidden_field :user_id, value: current_user %>
   <div class="field">
-    <%= f.label :unit_price %><br>
-    <%= f.text_field :unit_price %>
+    <%= f.label :stock_id, @stock.ticker_symbol  %><br>
+    <%= f.hidden_field :stock_id, value: @stock.id %>
   </div>
   <div class="field">
-    <%= f.label :stock_id %><br>
-    <%= f.text_field :stock_id %>
+    Unit Price: <%= @stock.last_known_price %>
   </div>
   <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
+    <%= f.label :type, "Buy or Sell" %><br>
+    <%= f.select :type, [['Buy', 1], ['Sell', -1]] %>
   </div>
   <div class="field">
-    <%= f.label :type %><br>
-    <%= f.text_field :type %>
+    <%= f.label :quantity, "Shares to Trade" %><br>
+    <%= f.text_field :quantity %>
   </div>
   <div class="actions">
     <%= f.submit %>
