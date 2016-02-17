@@ -1,0 +1,6 @@
+<h2> Your Portfolio </h2>
+<% @stocks_hash = @user.stock_profits_hash %>
+<% @stock_hash.keys.sort_by {|stock| -@stocks_hash[stock] }.each do |stock| %>
+  <%= render 'position', locals: {user: @user, stock: stock, 
+                                  profit: @stocks_hash[stock] } %>
+<% end %>

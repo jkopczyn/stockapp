@@ -1,0 +1,6 @@
+<div class="stock_holding <%= profit > 0 ? "profit" : "loss" %>">
+  <h3> <%= stock.ticker_symbol %> </h3><br>
+  <h4> Shares: </h4> <span> <%= shares %> </span>
+  <h4> Net Change In Value: </h4> <span class="returns"> <%= profit %> </span>
+  <%= link_to new_stock_transaction_url(stock), "Buy or Sell This Stock" %>
+</div>

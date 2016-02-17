@@ -3,7 +3,7 @@ class Stock < ActiveRecord::Base
   monetize :last_known_price_cents
 
   has_many :transactions
-  has_many :users, through: :transactions
+  has_many :users, -> { distinct },  through: :transactions
 
   validates :ticker_symbol, presence: true, uniqueness: true
   validates :last_known_price, presence: true
