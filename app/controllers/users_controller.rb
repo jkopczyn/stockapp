@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_logged_out, only: [:new, :create]
+  before_action :require_logged_in, except: [:new, :create]
 
   def new
     @user = User.new
@@ -20,6 +21,7 @@ class UsersController < ApplicationController
   # GET /users/:id
   # GET /users/:id.json
   def show
+    @user =  User.find(params[:id])
   end
 
   # GET /transactions/:id/edit

@@ -23,13 +23,14 @@ class User < ActiveRecord::Base
   def stock_profits_hash
     stock_hash = Hash[
     transactions.sort_by {|t| t.stock }.group_by {|t| t.stock}.map do |t_group|
-      current_price = t_group.first.stock
-      total_profit = t_group.map do |t| 
-        t.quantity * (current_price - t.unit_price)
+      stock = t_group.first
+      ts = t_group.last
+      current_price = stock.last_known_price
+      total_profit = ts.map do |t| 
+        t.quantity * (current_price - t.unit_price) * (t.transaction_type)
       end.inject(&:+)
-      total_shares = t_group.map {|t| t.quantity }.inject(&:+)
-      [stock_hash[t_group.first.stock], {profit: total_profit, 
-                                         shares: total_shares}]
+      total_shares = ts.map {|t| t.quantity * (t.transaction_type) }.inject(&:+)
+      [stock, {profit: total_profit, shares: total_shares}]
     end]
   end
 
