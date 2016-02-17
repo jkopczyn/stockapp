@@ -1,21 +1,20 @@
-# Scaffold
+# StockApp
 
-This is a basic Rails app set up for starting a web project from. It has a
-simple, secure login system already created, with emails used as usernames.
-It is set up to use Javascript rather than the Coffeescript default; if
-you wish to use Coffeescript, add `gem 'coffee-rails'` in the Gemfile before
-creating any scaffolding.
+Simple app using the Yahoo Finance API and the yahoofinance gem to manage a
+simple stock portfolio.
 
+## Structure outline
 
-##To configure:
+User model with password and session management, as well as balance outstanding.
+  * new, create, show, edit, update
 
-Edit `database.yml` to include the project name in database fields. Configure
-with 
-    $ rake db:create db:setup
+Stock model stores a ticker symbol (immutable), last known price, and time of 
+last check. Any action using this will check the finance client unless time of
+last check is a minute or less in the past. (This can be batched and should be
+where possible.)
+  * show, create, user:index
 
-When adding the models and controllers needed for your project's arrangement,
-use
-
-    $ rails g scaffold ModelName field1:type field2:type
-
-Which will create the model, blank controller, migration, views, and tests.
+Transaction model can be :buy or :sell, and is immutable once created. It is
+linked to a user and a stock, together with a quantity, time, and (just for
+cachng) the price at that time.
+  * new, create
