@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160217095555) do
+ActiveRecord::Schema.define(version: 20160217085028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,9 +26,6 @@ ActiveRecord::Schema.define(version: 20160217095555) do
 
   add_index "stocks", ["ticker_symbol"], name: "index_stocks_on_ticker_symbol", unique: true, using: :btree
 
-# Could not dump table "transactions" because of following StandardError
-#   Unknown type 'transaction_type' for column 'type'
-
   create_table "users", force: :cascade do |t|
     t.string   "password_digest"
     t.string   "email",                            null: false
@@ -42,6 +39,4 @@ ActiveRecord::Schema.define(version: 20160217095555) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["session_token"], name: "index_users_on_session_token", unique: true, using: :btree
 
-  add_foreign_key "transactions", "stocks"
-  add_foreign_key "transactions", "users"
 end
