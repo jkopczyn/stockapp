@@ -16,18 +16,18 @@ class Stock < ActiveRecord::Base
   def self.update_prices(stocks)
     client = YahooFinance::Client.new 
     symbols = stocks.map { |stock| stock.ticker_symbol } 
-    quotes = Hash[client.quotes(symbols, [:last_trade_price]).map do |options| 
-      [options[:symbol], options[:last_trade_price].to_i] 
+    quotes = Hash[client.quotes(symbols, [:symbol, :last_trade_price]).map do |options| 
+      [options[:symbol], Money.new(options[:last_trade_price])] 
     end] 
     stocks.each do |stock| 
-      stock.update ({ price: quotes[stock.ticker_symbol]}) 
+      stock.update ({ last_known_price: quotes[stock.ticker_symbol]}) 
     end 
   end
 
   def self.find_by_ticker_symbol(symbol)
     cand = super
     return cand if cand
-    self.create({ticker_symbol: symbol,  last_known_price: YahooFinance::Client.new.quote(
-      symbol.to_s)[:last_trade_price].to_i})
+    self.create({ticker_symbol: symbol,  last_known_price: Money.new(YahooFinance::Client.new.quote(
+      symbol.to_s)[:last_trade_price])})
   end
 end

@@ -1,6 +1,6 @@
 <% @stock = Stock.find(params[:stock_id]) %>
 <%= form_for @transaction, url: stock_transactions_path do |f| %>
-    <%= f.hidden_field :user_id, value: current_user %>
+    <%= f.hidden_field :user_id, value: current_user.id %>
   <div class="field">
     <%= f.label :stock_id, @stock.ticker_symbol  %><br>
     <%= f.hidden_field :stock_id, value: @stock.id %>
@@ -9,8 +9,8 @@
     Unit Price: <%= @stock.last_known_price %>
   </div>
   <div class="field">
-    <%= f.label :type, "Buy or Sell" %><br>
-    <%= f.select :type, [['Buy', 1], ['Sell', -1]] %>
+    <%= f.label :transaction_type, "Buy or Sell" %><br>
+    <%= f.select :transaction_type, [['Buy', 1], ['Sell', -1]] %>
   </div>
   <div class="field">
     <%= f.label :quantity, "Shares to Trade" %><br>

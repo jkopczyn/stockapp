@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160217085028) do
+ActiveRecord::Schema.define(version: 20160217130033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,20 @@ ActiveRecord::Schema.define(version: 20160217085028) do
 
   add_index "stocks", ["ticker_symbol"], name: "index_stocks_on_ticker_symbol", unique: true, using: :btree
 
+  create_table "transactions", force: :cascade do |t|
+    t.integer  "unit_price_cents",    default: 0,     null: false
+    t.string   "unit_price_currency", default: "USD", null: false
+    t.integer  "stock_id",                            null: false
+    t.integer  "user_id",                             null: false
+    t.integer  "transaction_type",    default: 1,     null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "quantity",                            null: false
+  end
+
+  add_index "transactions", ["stock_id"], name: "index_transactions_on_stock_id", using: :btree
+  add_index "transactions", ["user_id"], name: "index_transactions_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "password_digest"
     t.string   "email",                            null: false
@@ -39,4 +53,6 @@ ActiveRecord::Schema.define(version: 20160217085028) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["session_token"], name: "index_users_on_session_token", unique: true, using: :btree
 
+  add_foreign_key "transactions", "stocks"
+  add_foreign_key "transactions", "users"
 end
