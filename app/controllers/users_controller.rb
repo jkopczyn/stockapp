@@ -17,6 +17,30 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/:id
+  # GET /users/:id.json
+  def show
+  end
+
+  # GET /transactions/:id/edit
+  def edit
+  end
+
+  # PATCH/PUT /transactions/:id
+  # PATCH/PUT /transactions/:id.json
+  def update
+    respond_to do |format|
+      if @transaction.update(transaction_params)
+        format.html { redirect_to @transaction, notice: 'Transaction was successfully updated.' }
+        format.json { render :show, status: :ok, location: @transaction }
+      else
+        format.html { render :edit }
+        format.json { render json: @transaction.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
   private
   def user_params
     params.require(:user).permit(:email, :password, :session_token)

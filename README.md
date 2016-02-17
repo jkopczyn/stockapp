@@ -16,5 +16,5 @@ where possible.)
 
 Transaction model can be :buy or :sell, and is immutable once created. It is
 linked to a user and a stock, together with a quantity, time, and (just for
-cachng) the price at that time.
+caching) the unit price at that time.
   * new, create
