@@ -3,18 +3,22 @@ class StocksController < ApplicationController
 
   # GET /users/:user_id/stocks
   def index
-    @stocks = User.find(params[:user_id].stocks
+    @stocks = User.find(params[:user_id]).stocks
+    Stock.update_prices(@stocks.reject do |stock| 
+      Time.now - stock.updated_at < 1.minute
+    end)
   end
 
   # GET /stocks/:id
   # GET /stocks/:id.json
   def show
+    set_stock
   end
 
   # POST /stocks
   # POST /stocks.json
   def create
-    @stock = Stock.new(stock_params)
+    set_stock
 
     respond_to do |format|
       if @stock.save
@@ -30,11 +34,16 @@ class StocksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_stock
-      @stock = Stock.find(params[:id])
+      if stock_params[:id]
+        @stock = Stock.find(stock_params[:id])
+      elsif params[:ticker_symbol]
+        @stock = Stock.find_by_ticker_symbol(stock_params[:ticker_symbol]
+      end
+      @stock.update_price unless Time.now - @stock.updated_at < 1.minute
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def stock_params
-      params.require(:stock).permit(:ticker_symbol)
+      params.require(:stock).permit(:ticker_symbol, :id)
     end
 end
