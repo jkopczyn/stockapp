@@ -1,13 +1,16 @@
 class User < ActiveRecord::Base
+  monetize :balance_cents
+  attr_reader :password
+
+  has_many :transactions
+  has_many :stocks, through: :transactions
+  
   validates :email, :session_token, presence: true, uniqueness: true
   validates :password_digest, presence: true
   after_initialize :ensure_session_token
 
-  monetize :balance_cents
-
-  attr_reader :password
-  validates :password, length: {minimum: 6, allow_nil: true }
-
+  validates :password, length: {minimum: 8, allow_nil: true }
+ 
   def self.find_by_credentials(email, password)
     cand = self.find_by_email(email)
     if cand and cand.is_password?(password)
