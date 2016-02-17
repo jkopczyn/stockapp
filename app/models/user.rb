@@ -27,7 +27,9 @@ class User < ActiveRecord::Base
       total_profit = t_group.map do |t| 
         t.quantity * (current_price - t.unit_price)
       end.inject(&:+)
-      [stock_hash[t_group.first.stock], total_profit]
+      total_shares = t_group.map {|t| t.quantity }.inject(&:+)
+      [stock_hash[t_group.first.stock], {profit: total_profit, 
+                                         shares: total_shares}]
     end]
   end
 

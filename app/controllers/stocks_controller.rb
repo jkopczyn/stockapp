@@ -13,6 +13,8 @@ class StocksController < ApplicationController
   # GET /stocks/:id
   # GET /stocks/:id.json
   def show
+    format.html { render 'position', locals: {user: current_user, stock: @stock,
+                                              shares: "", profit: "" }
   end
 
   # POST /stocks
