@@ -1,5 +1,6 @@
 class Transaction < ActiveRecord::Base
   attr_readonly :stock, :user, :unit_price, :transaction_type, :quantity
+  attr_readonly :updated_at, :created_at
   monetize :unit_price_cents
 
   belongs_to :stock
