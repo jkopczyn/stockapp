@@ -1,9 +1,10 @@
 class StocksController < ApplicationController
-  before_action :set_stock, only: [:show, :edit, :update, :destroy]
+  before_action :set_stock, only: [:show, :create]
+  before_action :require_logged_in, except: :show
 
   # GET /users/:user_id/stocks
   def index
-    @stocks = User.find(params[:user_id]).stocks
+    @stocks = current_user.stocks
     Stock.update_prices(@stocks.reject do |stock| 
       Time.now - stock.updated_at < 1.minute
     end)
@@ -12,13 +13,11 @@ class StocksController < ApplicationController
   # GET /stocks/:id
   # GET /stocks/:id.json
   def show
-    set_stock
   end
 
   # POST /stocks
   # POST /stocks.json
   def create
-    set_stock
 
     respond_to do |format|
       if @stock.save

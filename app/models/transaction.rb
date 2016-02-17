@@ -9,6 +9,7 @@ class Transaction < ActiveRecord::Base
   before_validation :stock_info_current
 
   validates :unit_price, :transaction_type, :quantity, presence: true
+  validates :stock, :user, presence: true
   validate :user_can_afford
 
   private
