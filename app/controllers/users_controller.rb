@@ -24,6 +24,8 @@ class UsersController < ApplicationController
 
   # GET /transactions/:id/edit
   def edit
+    @user = User.find(params[:id])
+    render :edit
   end
 
   # PATCH/PUT /transactions/:id
