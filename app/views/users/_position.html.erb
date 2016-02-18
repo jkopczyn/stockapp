@@ -1,11 +1,13 @@
-<div class="stock_holding <%= profit > Money.new(0) ? "profit" : "loss" %>">
-  <h3> <%= stock.ticker_symbol %> </h3>
-  <% if shares != 0 %>
-    <h4> Shares: </h4> <span> <%= shares %> </span>
-  <% end %>
-  <% if profit != Money.new(0) %>
-    <h4> Net Change In Value: </h4> <span class="returns"> <%= profit %> </span>
-  <% end %>
-  <br />
-  <%= link_to "Buy or Sell This Stock", new_stock_transaction_url(stock)  %>
-</div>
+<% if stock %>
+  <div class="stock_holding <%= profit > Money.new(0) ? "profit" : "loss" %>">
+    <h3> <%= stock.ticker_symbol %> </h3>
+    <% if shares != 0 %>
+      <h4> Shares: </h4> <span> <%= shares %> </span>
+    <% end %>
+    <% if profit != Money.new(0) %>
+      <h4> Net Change In Value: </h4> <span class="returns"> <%= profit %> </span>
+    <% end %>
+    <br />
+    <%= link_to "Buy or Sell This Stock", new_stock_transaction_url(stock)  %>
+  </div>
+<% end %>

@@ -17,7 +17,7 @@ class Stock < ActiveRecord::Base
     client = YahooFinance::Client.new 
     symbols = stocks.map { |stock| stock.ticker_symbol } 
     quotes = Hash[client.quotes(symbols, [:symbol, :last_trade_price]).map do |options| 
-      [options[:symbol], Money.new(options[:last_trade_price])] 
+      [options[:symbol], Money.new(options[:last_trade_price].to_d*100)] 
     end] 
     stocks.each do |stock| 
       stock.update ({ last_known_price: quotes[stock.ticker_symbol]}) 
@@ -28,6 +28,6 @@ class Stock < ActiveRecord::Base
     cand = super
     return cand if cand
     self.create({ticker_symbol: symbol,  last_known_price: Money.new(YahooFinance::Client.new.quote(
-      symbol.to_s)[:last_trade_price])})
+      symbol.to_s)[:last_trade_price].to_d*100)})
   end
 end
