@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resources :users, only: [:new, :create, :show, :edit, :update] do
     resources :stocks, only: :index
   end
+  
+  get 'stocks/symbol/:ticker_symbol' => 'stocks#show'
   resources :stocks, only: [:show, :create] do
     resources :transactions, only: [:new, :create]
   end

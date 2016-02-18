@@ -12,15 +12,13 @@ class StocksController < ApplicationController
 
   # GET /stocks/:id
   # GET /stocks/:id.json
+  # GET /stocks/symbol/:ticker_symbol
   def show
-    format.html { render 'position', locals: {user: current_user, stock: @stock,
-                                              shares: "", profit: "" }
   end
 
   # POST /stocks
   # POST /stocks.json
   def create
-
     respond_to do |format|
       if @stock.save
         format.html { redirect_to @stock, notice: 'Stock was successfully created.' }
@@ -33,18 +31,18 @@ class StocksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_stock
-      if stock_params[:id]
-        @stock = Stock.find(stock_params[:id])
-      elsif params[:ticker_symbol]
-        @stock = Stock.find_by_ticker_symbol(stock_params[:ticker_symbol]
-      end
-      @stock.update_price unless Time.now - @stock.updated_at < 1.minute
+  # Use callbacks to share common setup or constraints between actions.
+  def set_stock
+    if params[:id]
+      @stock = Stock.find(params[:id])
+    elsif params[:ticker_symbol]
+      @stock = Stock.find_by_ticker_symbol(params[:ticker_symbol])
     end
+    @stock.update_price if @stock and Time.now - @stock.updated_at > 1.minute 
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def stock_params
-      params.require(:stock).permit(:ticker_symbol, :id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def stock_params
+    params.require(:stock).permit(:ticker_symbol)
+  end
 end
